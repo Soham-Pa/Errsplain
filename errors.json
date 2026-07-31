@@ -1,0 +1,162 @@
+[
+  {
+    "id": "py-none-subscript",
+    "language": "Python",
+    "keyword": "'NoneType' object is not subscriptable",
+    "explanation": "You tried to use square-bracket indexing (like value[0] or value['key']) on a variable that is actually None, instead of a list, dict, or string.",
+    "cause": "A function or method call earlier returned None instead of the collection you expected — often because a function has no explicit return statement, or a search/lookup failed and returned None silently.",
+    "fix": "if result is not None:\n    value = result[0]"
+  },
+  {
+    "id": "py-none-attribute",
+    "language": "Python",
+    "keyword": "'NoneType' object has no attribute",
+    "explanation": "You called a method or accessed an attribute on a variable that turned out to be None.",
+    "cause": "Very often this happens when a method that modifies a list in place (like .sort() or .append()) is mistakenly assigned back to a variable, since those methods return None, not the modified object.",
+    "fix": "my_list.sort()          # correct: modifies in place\n# NOT: my_list = my_list.sort()"
+  },
+  {
+    "id": "py-index-out-of-range",
+    "language": "Python",
+    "keyword": "IndexError: list index out of range",
+    "explanation": "You tried to access an index in a list that doesn't exist — for example asking for the 5th item in a list that only has 3.",
+    "cause": "Usually an off-by-one mistake in a loop, or assuming a list has more items than it actually does after filtering or splitting.",
+    "fix": "if len(my_list) > index:\n    value = my_list[index]"
+  },
+  {
+    "id": "py-keyerror",
+    "language": "Python",
+    "keyword": "KeyError",
+    "explanation": "You tried to access a dictionary key that doesn't exist.",
+    "cause": "Assuming a key is always present in a dictionary, when in reality it may be missing depending on the input data (very common with JSON from APIs).",
+    "fix": "value = my_dict.get('key', 'default_value')"
+  },
+  {
+    "id": "py-zero-division",
+    "language": "Python",
+    "keyword": "ZeroDivisionError: division by zero",
+    "explanation": "Your code attempted to divide a number by zero, which is mathematically undefined.",
+    "cause": "The denominator in a division came from a variable (like a count or total) that turned out to be zero at runtime, often when a list or dataset is empty.",
+    "fix": "average = total / count if count != 0 else 0"
+  },
+  {
+    "id": "py-valueerror-int",
+    "language": "Python",
+    "keyword": "ValueError: invalid literal for int()",
+    "explanation": "You tried to convert a string to an integer using int(), but the string doesn't represent a valid whole number.",
+    "cause": "Common when converting user input or data read from a file/CSV that contains empty strings, letters, or decimal points where a clean integer was expected.",
+    "fix": "if text.strip().isdigit():\n    value = int(text)"
+  },
+  {
+    "id": "py-module-not-found",
+    "language": "Python",
+    "keyword": "ModuleNotFoundError: No module named",
+    "explanation": "Python cannot find a package you're trying to import.",
+    "cause": "The package isn't installed in your current environment, or you're running the script with a different Python interpreter/virtual environment than the one where you installed it.",
+    "fix": "pip install package_name\n# or if using multiple environments:\npython -m pip install package_name"
+  },
+  {
+    "id": "py-indentation-error",
+    "language": "Python",
+    "keyword": "IndentationError: unexpected indent",
+    "explanation": "Python found a line indented differently than it expected, breaking the code block structure.",
+    "cause": "Mixing tabs and spaces, or copy-pasting code from a source with different indentation, is the most common cause since Python relies on indentation to define blocks.",
+    "fix": "Use a consistent indentation style (4 spaces is standard) throughout the file. Most editors can auto-convert tabs to spaces."
+  },
+  {
+    "id": "py-name-error",
+    "language": "Python",
+    "keyword": "NameError: name is not defined",
+    "explanation": "You referenced a variable or function that Python has no record of.",
+    "cause": "Usually a typo in the variable name, using a variable before it's assigned, or trying to use a variable outside the scope (like a function) where it was created.",
+    "fix": "Check for typos and make sure the variable is defined before this line runs, in the same or an accessible scope."
+  },
+  {
+    "id": "py-typeerror-int-str",
+    "language": "Python",
+    "keyword": "unsupported operand type(s) for +",
+    "explanation": "You tried to combine two values of incompatible types, like adding a number and a string together directly.",
+    "cause": "Data from user input, files, or APIs comes in as a string by default, and Python won't automatically convert it for arithmetic operations.",
+    "fix": "total = 5 + int(user_input)\n# or\nmessage = \"Total: \" + str(total)"
+  },
+  {
+    "id": "py-file-not-found",
+    "language": "Python",
+    "keyword": "FileNotFoundError",
+    "explanation": "Python tried to open a file at a path that doesn't exist.",
+    "cause": "The file path is relative to where you run the script from (not where the script itself is located), so running the script from a different folder often breaks file paths that worked before.",
+    "fix": "import os\npath = os.path.join(os.path.dirname(__file__), 'data.txt')"
+  },
+  {
+    "id": "py-recursion-error",
+    "language": "Python",
+    "keyword": "RecursionError: maximum recursion depth exceeded",
+    "explanation": "A recursive function called itself too many times without stopping.",
+    "cause": "Missing or incorrect base case in a recursive function, so it never stops calling itself.",
+    "fix": "def countdown(n):\n    if n <= 0:      # base case\n        return\n    countdown(n - 1)"
+  },
+  {
+    "id": "js-cannot-read-undefined",
+    "language": "JavaScript",
+    "keyword": "Cannot read properties of undefined",
+    "explanation": "You tried to access a property or method on a value that is undefined instead of an object.",
+    "cause": "Very common with API responses or DOM lookups — the object you expected either hasn't loaded yet, or a previous step (like document.getElementById) didn't find the element and returned null/undefined.",
+    "fix": "if (data && data.user) {\n  console.log(data.user.name);\n}"
+  },
+  {
+    "id": "js-cannot-read-null",
+    "language": "JavaScript",
+    "keyword": "Cannot read properties of null",
+    "explanation": "You tried to access a property on a value that is null, meaning it was explicitly set to 'nothing' rather than never assigned.",
+    "cause": "Most often a DOM query like document.querySelector() ran before the element existed on the page, or ran against a selector that doesn't match anything.",
+    "fix": "const el = document.querySelector('.my-class');\nif (el) {\n  el.textContent = 'Hello';\n}"
+  },
+  {
+    "id": "js-reference-error",
+    "language": "JavaScript",
+    "keyword": "ReferenceError: is not defined",
+    "explanation": "You referenced a variable that JavaScript has never heard of.",
+    "cause": "A typo in the variable name, forgetting to declare the variable with let/const/var, or trying to use a variable before its script has loaded on the page.",
+    "fix": "let userName = 'Alex';\nconsole.log(userName); // matches the declared name exactly"
+  },
+  {
+    "id": "js-not-a-function",
+    "language": "JavaScript",
+    "keyword": "is not a function",
+    "explanation": "You tried to call something as a function, but it isn't one.",
+    "cause": "Common causes: a typo in a method name, calling a variable that actually holds a string/number/object, or an array method being called on something that isn't really an array.",
+    "fix": "console.log(typeof myVar); // check what it actually is before calling it"
+  },
+  {
+    "id": "js-unexpected-token",
+    "language": "JavaScript",
+    "keyword": "Uncaught SyntaxError: Unexpected token",
+    "explanation": "The JavaScript parser hit a character it wasn't expecting and couldn't understand the code structure at that point.",
+    "cause": "Almost always a small syntax mistake: a missing comma, an extra or missing closing bracket/parenthesis, or a stray character left over from editing.",
+    "fix": "Check the line just before the one mentioned in the error — the real mistake is often on the previous line, not the exact line number shown."
+  },
+  {
+    "id": "js-unhandled-promise",
+    "language": "JavaScript",
+    "keyword": "Uncaught (in promise)",
+    "explanation": "A Promise (often from an API call or async function) failed, and nothing in your code caught the error.",
+    "cause": "Missing a .catch() on a Promise chain, or missing a try/catch block around an await call inside an async function.",
+    "fix": "try {\n  const res = await fetch(url);\n} catch (error) {\n  console.error('Request failed:', error);\n}"
+  },
+  {
+    "id": "js-nan-result",
+    "language": "JavaScript",
+    "keyword": "NaN",
+    "explanation": "A math operation produced 'Not a Number', meaning one of the values involved wasn't actually a usable number.",
+    "cause": "Very often caused by trying to do math on a value that came from an input field or API as a string, or on a variable that is still undefined.",
+    "fix": "const total = Number(inputValue) + 5;\nif (isNaN(total)) {\n  console.log('Invalid number input');\n}"
+  },
+  {
+    "id": "js-json-parse-error",
+    "language": "JavaScript",
+    "keyword": "Unexpected token in JSON",
+    "explanation": "JSON.parse() was given text that isn't valid JSON, so it couldn't be converted into a JavaScript object.",
+    "cause": "Often happens when an API returns an error page (HTML) instead of JSON, or when trying to parse a value that's already a JavaScript object rather than a JSON string.",
+    "fix": "try {\n  const data = JSON.parse(responseText);\n} catch (error) {\n  console.error('Invalid JSON received:', error);\n}"
+  }
+]
