@@ -388,7 +388,7 @@
   const causeLine   = document.getElementById('causeLine');
   const fixLine     = document.getElementById('fixLine');
 
-  submitBtn.addEventListener('click', () => {
+  function runMatch() {
     const pastedError = errorInput.value.trim();
 
     if (!pastedError) {
@@ -405,6 +405,16 @@
 
     outputCard.style.display = 'block';
     outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  submitBtn.addEventListener('click', runMatch);
+
+  errorInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault(); // stop the textarea from adding a newline
+      runMatch();
+    }
+    // Shift+Enter falls through and does the default behavior (new line)
   });
 
   function findMatch(pastedError) {
