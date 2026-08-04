@@ -24,22 +24,196 @@
     --teal-dim: rgba(95, 217, 196, 0.12);
     --font-mono: 'IBM Plex Mono', monospace;
     --font-body: 'Inter', sans-serif;
+    --sidebar-width: 260px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html, body {
+    height: 100%;
+  }
+
   body {
     background: var(--bg);
-    background-image:
-      radial-gradient(circle at 15% 0%, rgba(255, 138, 76, 0.06), transparent 40%),
-      radial-gradient(circle at 85% 100%, rgba(95, 217, 196, 0.05), transparent 40%);
     color: var(--text);
     font-family: var(--font-body);
+    display: flex;
     min-height: 100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 18px;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .sidebar-brand .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 24px;
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border-soft);
+    margin: 4px 0 18px;
+  }
+
+  .sidebar-section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+
+  .sidebar-search {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    padding: 9px 11px;
+    margin-bottom: 14px;
+  }
+
+  .sidebar-search::placeholder {
+    color: var(--text-faint);
+  }
+
+  .sidebar-search:focus {
+    outline: none;
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .error-group-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 14px 0 6px;
+  }
+
+  .error-group-label:first-child {
+    margin-top: 0;
+  }
+
+  .error-list {
+    flex: 1;
+  }
+
+  .error-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 7px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .error-item:hover {
+    background: var(--surface-raised);
+    color: var(--teal);
+  }
+
+  .empty-state {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    padding: 8px 10px;
+  }
+
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 30;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .sidebar-overlay {
+    display: none;
+  }
+
+  /* ---------- Main content ---------- */
+  .main {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 64px 20px 40px;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(255, 138, 76, 0.06), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(95, 217, 196, 0.05), transparent 40%);
   }
 
   .wrap {
@@ -310,6 +484,41 @@
     text-align: center;
   }
 
+  /* ---------- Mobile ---------- */
+  @media (max-width: 860px) {
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 40;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      box-shadow: 20px 0 40px -20px rgba(0,0,0,0.5);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 35;
+    }
+
+    .main {
+      padding-top: 84px;
+    }
+  }
+
   @media (max-width: 480px) {
     h1 { font-size: 26px; }
     .panel-footer { flex-direction: column; align-items: stretch; gap: 12px; }
@@ -319,74 +528,104 @@
 </head>
 <body>
 
-  <div class="wrap">
-    <div class="eyebrow"><span class="dot"></span> DEBUG TOOL</div>
-    <h1>Errsplain<span class="cursor"></span></h1>
-    <p class="subhead">Paste a raw error message. Get a plain-English explanation, the likely cause, and a fix — no more digging through ten Stack Overflow tabs.</p>
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <div class="terminal-panel">
-      <div class="terminal-titlebar">
-        <span class="tb-dot"></span>
-        <span class="tb-dot"></span>
-        <span class="tb-dot"></span>
-        <span class="tb-label">error_input.log</span>
-      </div>
-      <div class="terminal-body">
-        <div class="prompt-row">
-          <span class="prompt-symbol">&gt;</span>
-          <textarea id="errorInput" placeholder="TypeError: 'NoneType' object is not subscriptable"></textarea>
-        </div>
-        <div class="panel-footer">
-          <span class="hint">works with Python &amp; JavaScript errors</span>
-          <button id="submitBtn">Explain it</button>
-        </div>
-      </div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span> ERRSPLAIN</div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-link" href="#top">Home</a>
+      <a class="nav-link" href="https://github.com/soham-pa/Errsplain" target="_blank" rel="noopener">GitHub</a>
+      <a class="nav-link" href="https://www.linkedin.com/in/soham-paul-136778369" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section-label">Browse Errors</div>
+    <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="filter errors...">
+    <div class="error-list" id="errorList">
+      <div class="empty-state">Loading errors…</div>
     </div>
+  </aside>
 
-    <div id="outputCard">
-      <div class="output-header">
-        <span class="stat-dot" id="statusDot"></span>
-        <span id="matchStatus">Match found</span>
+  <div class="main" id="top">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span> DEBUG TOOL</div>
+      <h1>Errsplain<span class="cursor"></span></h1>
+      <p class="subhead">Paste a raw error message. Get a plain-English explanation, the likely cause, and a fix — no more digging through ten Stack Overflow tabs.</p>
+
+      <div class="terminal-panel">
+        <div class="terminal-titlebar">
+          <span class="tb-dot"></span>
+          <span class="tb-dot"></span>
+          <span class="tb-dot"></span>
+          <span class="tb-label">error_input.log</span>
+        </div>
+        <div class="terminal-body">
+          <div class="prompt-row">
+            <span class="prompt-symbol">&gt;</span>
+            <textarea id="errorInput" placeholder="TypeError: 'NoneType' object is not subscriptable"></textarea>
+          </div>
+          <div class="panel-footer">
+            <span class="hint">works with Python &amp; JavaScript errors</span>
+            <button id="submitBtn">Explain it</button>
+          </div>
+        </div>
       </div>
-      <div class="trace-line">
-        <span class="trace-tag tag-info">WHAT</span>
-        <p class="trace-text" id="whatText"></p>
+
+      <div id="outputCard">
+        <div class="output-header">
+          <span class="stat-dot" id="statusDot"></span>
+          <span id="matchStatus">Match found</span>
+        </div>
+        <div class="trace-line">
+          <span class="trace-tag tag-info">WHAT</span>
+          <p class="trace-text" id="whatText"></p>
+        </div>
+        <div class="trace-line" id="causeLine">
+          <span class="trace-tag tag-cause">CAUSE</span>
+          <p class="trace-text" id="causeText"></p>
+        </div>
+        <div class="trace-line" id="fixLine">
+          <span class="trace-tag tag-fix">FIX</span>
+          <span class="trace-text code" id="fixText"></span>
+        </div>
       </div>
-      <div class="trace-line" id="causeLine">
-        <span class="trace-tag tag-cause">CAUSE</span>
-        <p class="trace-text" id="causeText"></p>
-      </div>
-      <div class="trace-line" id="fixLine">
-        <span class="trace-tag tag-fix">FIX</span>
-        <span class="trace-text code" id="fixText"></span>
-      </div>
+
+      <footer>built by Soham · deployed on GitHub Pages</footer>
     </div>
-
-    <footer>built by Soham · deployed on GitHub Pages</footer>
   </div>
 
 <script>
   let errorDatabase = [];
 
+  const submitBtn      = document.getElementById('submitBtn');
+  const errorInput     = document.getElementById('errorInput');
+  const outputCard     = document.getElementById('outputCard');
+  const statusDot      = document.getElementById('statusDot');
+  const matchStatus    = document.getElementById('matchStatus');
+  const whatText       = document.getElementById('whatText');
+  const causeText      = document.getElementById('causeText');
+  const fixText        = document.getElementById('fixText');
+  const causeLine      = document.getElementById('causeLine');
+  const fixLine        = document.getElementById('fixLine');
+  const errorList      = document.getElementById('errorList');
+  const sidebarSearch  = document.getElementById('sidebarSearch');
+  const sidebar        = document.getElementById('sidebar');
+  const sidebarToggle  = document.getElementById('sidebarToggle');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+
   fetch('errors.json')
     .then(response => response.json())
     .then(data => {
       errorDatabase = data;
+      renderSidebarList(errorDatabase);
     })
     .catch(err => {
       console.error('Could not load errors.json:', err);
+      errorList.innerHTML = '<div class="empty-state">Could not load errors.json</div>';
     });
-
-  const submitBtn   = document.getElementById('submitBtn');
-  const errorInput  = document.getElementById('errorInput');
-  const outputCard  = document.getElementById('outputCard');
-  const statusDot   = document.getElementById('statusDot');
-  const matchStatus = document.getElementById('matchStatus');
-  const whatText    = document.getElementById('whatText');
-  const causeText   = document.getElementById('causeText');
-  const fixText     = document.getElementById('fixText');
-  const causeLine   = document.getElementById('causeLine');
-  const fixLine     = document.getElementById('fixLine');
 
   function runMatch() {
     const pastedError = errorInput.value.trim();
@@ -411,10 +650,9 @@
 
   errorInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault(); // stop the textarea from adding a newline
+      event.preventDefault();
       runMatch();
     }
-    // Shift+Enter falls through and does the default behavior (new line)
   });
 
   function findMatch(pastedError) {
@@ -445,6 +683,79 @@
 
     causeLine.style.display = 'none';
     fixLine.style.display   = 'none';
+  }
+
+  // ---------- Sidebar: browsable error list ----------
+
+  function renderSidebarList(entries) {
+    errorList.innerHTML = '';
+
+    if (entries.length === 0) {
+      errorList.innerHTML = '<div class="empty-state">No matching errors</div>';
+      return;
+    }
+
+    const languages = [...new Set(entries.map(e => e.language))];
+
+    languages.forEach(lang => {
+      const groupLabel = document.createElement('div');
+      groupLabel.className = 'error-group-label';
+      groupLabel.textContent = lang;
+      errorList.appendChild(groupLabel);
+
+      entries
+        .filter(entry => entry.language === lang)
+        .forEach(entry => {
+          const item = document.createElement('button');
+          item.className = 'error-item';
+          item.type = 'button';
+          item.textContent = entry.keyword;
+          item.title = entry.keyword;
+
+          item.addEventListener('click', () => {
+            errorInput.value = entry.keyword;
+            showMatch(entry);
+            outputCard.style.display = 'block';
+            outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            closeSidebarOnMobile();
+          });
+
+          errorList.appendChild(item);
+        });
+    });
+  }
+
+  sidebarSearch.addEventListener('input', () => {
+    const query = sidebarSearch.value.trim().toLowerCase();
+
+    if (!query) {
+      renderSidebarList(errorDatabase);
+      return;
+    }
+
+    const filtered = errorDatabase.filter(entry =>
+      entry.keyword.toLowerCase().includes(query) ||
+      entry.language.toLowerCase().includes(query)
+    );
+
+    renderSidebarList(filtered);
+  });
+
+  // ---------- Sidebar: mobile toggle ----------
+
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('open');
+  });
+
+  sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+  });
+
+  function closeSidebarOnMobile() {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
   }
 </script>
 
